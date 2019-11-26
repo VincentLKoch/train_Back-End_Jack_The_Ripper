@@ -21,12 +21,12 @@ class London {
         try {
             const victim = await this.dal.getCitizen(name, xPos, yPos)
             if (this.victimExists) { //already a victim
-                throw "vic 1"
+                throw "vic1"
             }
-            //If there is a stack in the envelope
+            
             if ((victim.posX !== xPos)||( victim.posY !== yPos)) {
                 //Incorrect positions given
-                throw "vic 2"
+                throw "vic2"
             }
             //making the citizen the victim
             await this.dal.makeCitizenVictim(victim.id)
