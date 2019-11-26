@@ -12,7 +12,7 @@ describe('makeVictim test', () => {
         try {
 
             london.dal.getCitizen = jest.fn()
-                .mockReturnValue({ id: 1, name: "Toto", posX: 1, posY: 1, isVictim: false  });
+                .mockReturnValue({ id: 1, name: "Toto", posX: 1, posY: 1, isVictim: false });
             london.dal.makeCitizenVictim = jest.fn()
 
             await london.makeVictim("Toto", 1, 1)
@@ -30,10 +30,10 @@ describe('makeVictim test', () => {
     it('There is already a victim', async () => {
         try {
             london.dal.getCitizen = jest.fn()
-                .mockReturnValue({ id: 1, name: "Toto", posX: 1, posY: 1, isVictim: false  });
+                .mockReturnValue({ id: 1, name: "Toto", posX: 1, posY: 1, isVictim: false });
             london.victimExists = true
             await london.makeVictim("Toto", 1, 1)
-            
+
         } catch (error) {
             expect(error).toBe("vic1") //Victim already exists
         }
@@ -43,9 +43,9 @@ describe('makeVictim test', () => {
     it('There incorrect position given', async () => {
         try {
             london.dal.getCitizen = jest.fn()
-                .mockReturnValue({ id: 1, name: "Toto", posX: 2, posY: 2, isVictim: false  });
+                .mockReturnValue({ id: 1, name: "Toto", posX: 2, posY: 2, isVictim: false });
             await london.makeVictim("Toto", 1, 1)
-            
+
         } catch (error) {
             expect(error).toBe("vic2") //incorrect position given
         }
