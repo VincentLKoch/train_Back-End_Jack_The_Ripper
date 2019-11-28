@@ -26,7 +26,7 @@ class Dal {
             connection = await this.connect()
             //First get Repository
             const dataRepositoryCitizens = connection.getRepository(LondonCitizen)
-            
+
 
             //We put newStack in SQL
             await dataRepositoryCitizens.save(newCitizen)
@@ -44,7 +44,8 @@ class Dal {
         let connection
         try {
             connection = await this.connect()
-            return await connection.getRepository(LondonCitizen)
+            return await connection
+                .getRepository(LondonCitizen)
                 .createQueryBuilder("londonCItizen")
                 .getMany();
         } catch (err) {
@@ -59,7 +60,8 @@ class Dal {
         let connection
         try {
             connection = await this.connect()
-            return await connection.getRepository(LondonCitizen)
+            return await connection
+                .getRepository(LondonCitizen)
                 .createQueryBuilder("londonCitizen")
                 .where("londonCitizen.name = :name", { name: citizenName })
                 .andWhere("londonCitizen.posX = :posX", { posX: xPos })
@@ -77,7 +79,8 @@ class Dal {
         let connection
         try {
             connection = await this.connect()
-            await connection.createQueryBuilder()
+            await connection
+                .createQueryBuilder()
                 .update(LondonCitizen)
                 .set({ isVictim: true })
                 .where("londonCitizen.id=:id", { id: citizenId })
@@ -94,7 +97,8 @@ class Dal {
         let connection
         try {
             connection = await this.connect()
-            await connection.getRepository(LondonCitizen)
+            await connection
+                .getRepository(LondonCitizen)
                 .query('TRUNCATE TABLE LondonCitizen')
         } catch (error) {
             console.error(error.message)
