@@ -23,8 +23,8 @@ class London {
             if (this.victimExists) { //already a victim
                 throw "vic1"
             }
-            
-            if ((victim.posX !== xPos)||( victim.posY !== yPos)) {
+
+            if ((victim.posX !== xPos) || (victim.posY !== yPos)) {
                 //Incorrect positions given
                 throw "vic2"
             }
@@ -54,8 +54,8 @@ class London {
             let distance = 0
             let oneClosest = true 
 
-            if (!victim) {throw "fin1"} // no victim found
-            if (!citizens){throw "fin2"}
+            if (!victim) { throw "fin1" } // no victim found
+            if (!citizens) { throw "fin2" }
 
             for (let index = 0; index < citizens.length; index++) {
                 const citizen = await citizens[index];
@@ -75,6 +75,7 @@ class London {
                 else{
                     if(dist < distance){
                         distance = dist
+
                         closestIndex = index
                         oneClosest = true
                     }
@@ -84,7 +85,8 @@ class London {
 
         if (!oneClosest) {throw "fin3"} // more than one citizen is the closest 
 
-        return await citizens[closestIndex]
+
+            return await citizens[closestIndex]
 
         } catch (error) {
             throw error
