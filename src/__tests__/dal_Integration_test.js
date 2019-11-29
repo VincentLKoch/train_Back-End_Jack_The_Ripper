@@ -54,7 +54,7 @@ if (AllTests || testGetCitizenData) {
     test('Testing example', async () => {
         let result
         try {
-            result = await dal.(testingCitizen)
+            result = await dal.create(testingCitizen)
             expect().toReturnWith(testingCitizen)
         } catch (error) {
             expect(error).toBeNull()
