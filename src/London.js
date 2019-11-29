@@ -55,6 +55,7 @@ class London {
             numClosest = 0
 
             if (!victim) {throw "fin1"} // no victim found
+            if (!citizens){throw "fin2"}
 
             for (let index = 0; index < citizens.length; index++) {
                 const citizen = await citizens[index];
@@ -81,7 +82,7 @@ class London {
                 }
             }
 
-        if (numClosest !== 1) {throw "fin2"} // more than one citizen is the closest 
+        if (numClosest !== 1) {throw "fin3"} // more than one citizen is the closest 
 
         return await citizens[closestIndex]
 

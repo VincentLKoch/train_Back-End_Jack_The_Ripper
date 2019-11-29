@@ -17,6 +17,7 @@ app.use(function (_req, res, next) {
 
 
 app.post('/citizen/:name/:posX/:posY', async (req, res) => {
+  const name = req.query.name, posX = req.query.posX, posY = req.query.posY
 
   try {
     await getLondon().createCitizen(name, posX, posY)
@@ -24,7 +25,6 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
     res
       .status(200)
       .set({ 'Content-Type': 'application/json' })
-      .json(createdElements)
       .end();
 
   } catch (error) {
@@ -32,34 +32,81 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
     res
       .status(418)
       .set({ 'Content-Type': 'application/json' })
-      .json(createdElements)
       .end();
 
   }
 })
 
 app.post('/victim/:name/:posX/:posY', async (req, res) => {
+  const name = req.query.name, posX = req.query.posX, posY = req.query.posY
+
   try {
+    if (!posX || !(posX === '' + parseInt(posX)) && !posY || !(posY === '' + parseInt(posY))) {
+      throw "NoI"
+      }    
+    await getLondon().makeVictim(name,posY,posX)
+    res
+      .statut(204)
+      .end();
+
   } catch (error) {
-    switch (error) {
-      case "abc":
-      //TODO
-      default:
-        //TODO
-        //Unkown
-        console.error(error)
-        res
-          .status(418)
+      switch (error) {
+        case "NoI":
+          //Not a Int
+          res
+          .status(400)
           .json({
-            message: "Unkown Error",
+            message: "Pos is not a Int",
             receive: {
-              stackId: stackId
+              name: name,
+              posX: posX,
+              posY: posY
             }
           })
-          .end();
-    }
-  }
-})
+        case "vic1":
+          //citizen is already a victim
+          res
+              .status(409)
+              .json({
+               message: "Invalid victim",
+               receive: {
+                  name: name,
+                  posX: posX,
+                  posY: posY                  
+                }
+              })
+             .end();
+        case "vic2":
+          //Incorrect position given
+          res
+              .status(400)
+              .json({
+               message: "Invalid position",
+               receive: {
+                  name: name,
+                  posX: posX,
+                  posY: posY                  
+                }
+              })
+             .end();
+        default:
+        //Unkown
+        console.error(error)
+          res
+            .status(418)
+            .json({
+              message: "Unkown Error",
+              receive: {
+                name: name,
+                posX: posX,
+                posY: posY 
+              }
+            })
+            .end();
+
+    }//end switch
+  }//end catch error
+})//end remove
 
 app.get('/getJack', async (req, res) => {
 
