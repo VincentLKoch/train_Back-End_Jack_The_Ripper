@@ -1,4 +1,4 @@
-import { createConnection } from 'typeorm'
+import { createConnection} from 'typeorm'
 import { londonCitizenSchema } from './LondonCitizenSchema'
 import LondonCitizen from './londonCitizen'
 
@@ -25,13 +25,10 @@ class Dal {
         try {
             connection = await this.connect()
             //First get Repository
-            const dataRepositoryCitizens = connection.getRepository(LondonCitizen)
-
-
             //We put newStack in SQL
-            await dataRepositoryCitizens.save(newCitizen)
-            return newCitizen
-
+            return await connection
+                .getRepository(LondonCitizen)
+                .save(newCitizen)
         } catch (err) {
             console.error(err.message)
             throw err
@@ -46,7 +43,7 @@ class Dal {
             connection = await this.connect()
             return await connection
                 .getRepository(LondonCitizen)
-                .createQueryBuilder("londonCItizen")
+                .createQueryBuilder("londonCitizen")
                 .getMany();
         } catch (err) {
             console.error(err.message)
@@ -91,6 +88,32 @@ class Dal {
         } finally {
             await connection.close()
         }
+    }
+
+    async seperateVictimAndCitizens(){
+        let connection
+        try{
+            connection = await this.connect()
+            const victim =  await connection
+                .getRepository(LondonCitizen)
+                .createQueryBuilder("londonCitizen")
+                .where("londonCitizen.isVIctim = :isVictim", { isVictim: true })
+                .getOne();
+
+            const citizens = await connection
+            .getRepository(LondonCitizen)
+            .find({
+                isVictim : false
+            })
+
+            return [victim, citizens]
+
+        } catch (error) {
+            console.error(error.message)
+            throw error
+        } finally {
+            await connection.close()
+        }   
     }
 
     async removeAll() {
