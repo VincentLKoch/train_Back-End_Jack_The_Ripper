@@ -82,7 +82,7 @@ class London {
 
         if (this.numClosest !== 1) {throw "fin2"} // more than one citizen is the closest 
 
-        return citizens[closestIndex]
+        return await citizens[closestIndex]
 
         } catch (error) {
             throw error
