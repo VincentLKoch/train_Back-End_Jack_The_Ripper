@@ -1,4 +1,4 @@
-import { createConnection } from 'typeorm'
+import { createConnection} from 'typeorm'
 import { londonCitizenSchema } from './LondonCitizenSchema'
 import LondonCitizen from './londonCitizen'
 
@@ -88,6 +88,32 @@ class Dal {
         } finally {
             await connection.close()
         }
+    }
+
+    async seperateVictimAndCitizens(){
+        let connection
+        try{
+            connection = await this.connect()
+            const victim =  await connection
+                .getRepository(LondonCitizen)
+                .createQueryBuilder("londonCitizen")
+                .where("londonCitizen.isVIctim = :isVictim", { isVictim: true })
+                .getOne();
+
+            const citizens = await connection
+            .getRepository(LondonCitizen)
+            .find({
+                isVictim : false
+            })
+
+            return [victim, citizens]
+
+        } catch (error) {
+            console.error(error.message)
+            throw error
+        } finally {
+            await connection.close()
+        }   
     }
 
     async removeAll() {
