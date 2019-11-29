@@ -18,7 +18,7 @@ describe('findClosestCitizen test', () => {
             const jack = await london.findClosestCitizen()
 
             expect(london.dal.seperateVictimAndCitizens).toHaveBeenCalledTimes(1)
-            expect(jack).toBe({posX: 2, posY: 2})
+            expect(jack).toEqual({posX: 2, posY: 2})
 
         } catch (error) {
             expect(error).toBeNull()
