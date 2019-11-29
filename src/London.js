@@ -50,39 +50,39 @@ class London {
             const seperated = await this.dal.seperateVictimAndCitizens()
             const victim = seperated[0]
             const citizens = seperated[1]
-            const closestIndex 
-            const distance
-            numClosest = 0
+            let closestIndex = 0
+            let distance = 0
+            let oneClosest = true 
 
             if (!victim) {throw "fin1"} // no victim found
             if (!citizens){throw "fin2"}
 
             for (let index = 0; index < citizens.length; index++) {
                 const citizen = await citizens[index];
-                xDiff = citizen.posX - victim.posX
-                yDiff = citizen.posY - victim.posY
+                let xDiff = citizen.posX - victim.posX
+                let yDiff = citizen.posY - victim.posY
 
                 xDiff *= xDiff
                 yDiff *= yDiff
 
-                dist = Math.sqrt( xs + ys )
+                let dist = Math.sqrt( xDiff + yDiff )
 
                 if (index == 0){ 
                     distance = dist
-                    numClosest = 1
+                    oneClosest = true
                 }
 
                 else{
                     if(dist < distance){
                         distance = dist
-                        numClosest = 1
                         closestIndex = index
+                        oneClosest = true
                     }
-                    else if (dist = distance) {numClosest = numClosest + 1}
+                    else if (dist = distance) {oneClosest = false}
                 }
             }
 
-        if (numClosest !== 1) {throw "fin3"} // more than one citizen is the closest 
+        if (!oneClosest) {throw "fin3"} // more than one citizen is the closest 
 
         return await citizens[closestIndex]
 

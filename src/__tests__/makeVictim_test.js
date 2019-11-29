@@ -44,7 +44,8 @@ describe('makeVictim test', () => {
         try {
             london.dal.getCitizen = jest.fn()
                 .mockReturnValue({ id: 1, name: "Toto", posX: 2, posY: 2, isVictim: false });
-            await london.makeVictim("Toto", 1, 1)
+                london.victimExists = false
+                await london.makeVictim("Toto", 1, 1)
 
         } catch (error) {
             expect(error).toBe("vic2") //incorrect position given
