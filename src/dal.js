@@ -25,13 +25,10 @@ class Dal {
         try {
             connection = await this.connect()
             //First get Repository
-            const dataRepositoryCitizens = connection.getRepository(LondonCitizen)
-
-
             //We put newStack in SQL
-            await dataRepositoryCitizens.save(newCitizen)
-            return newCitizen
-
+            return await connection
+                .getRepository(LondonCitizen)
+                .save(newCitizen)
         } catch (err) {
             console.error(err.message)
             throw err
@@ -46,7 +43,7 @@ class Dal {
             connection = await this.connect()
             return await connection
                 .getRepository(LondonCitizen)
-                .createQueryBuilder("londonCItizen")
+                .createQueryBuilder("londonCitizen")
                 .getMany();
         } catch (err) {
             console.error(err.message)
