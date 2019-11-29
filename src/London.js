@@ -79,7 +79,7 @@ class London {
                         closestIndex = index
                         oneClosest = true
                     }
-                    else if (dist = distance) {oneClosest = false}
+                    else if (dist == distance) {oneClosest = false}
                 }
             }
 
