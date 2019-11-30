@@ -38,9 +38,10 @@ class London {
     }
 
 
+    //See getClosest.sql for the query / comment of an SQL way to get Jack (way faster)
+    //But since this TP is a javascript TP we will do it in javascript
     async findJack() {
         try {
-
             const victim = await this.dal.getData(true)
             if (!victim) { throw "No Victim" }
 
