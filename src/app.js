@@ -17,9 +17,7 @@ app.use(function (_req, res, next) {
 
 
 app.post('/citizen/:name/:posX/:posY', async (req, res) => {
-  // get req parameter
-  const name = req.query.name, posX = req.query.posX, posY = req.query.posY
-
+  const { name, posX, posY } = req.params
   try {
 
     if (!posX || !(posX === '' + parseInt(posX)) || !posY || !(posY === '' + parseInt(posY))) {
@@ -69,14 +67,13 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
 })
 
 app.post('/victim/:name/:posX/:posY', async (req, res) => {
-  const name = req.query.name, posX = req.query.posX, posY = req.query.posY
-
+  const { name, posX, posY } = req.params
   try {
     if (!posX || !(posX === '' + parseInt(posX)) || !posY || !(posY === '' + parseInt(posY))) {
       //if posX/posY is undefined or not int
       throw "bad request"
     }
-    const victim = await getLondon().createVictim(name, posY, posX)
+    const victim = await getLondon().createVictim(name, posX, posY)
 
     res
       .status(200)

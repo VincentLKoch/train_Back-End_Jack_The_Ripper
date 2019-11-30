@@ -18,7 +18,7 @@ class London {
     async createVictim(name, posX, posY) {
         try {
             //test if there is already a victim
-            if (this.dal.countVictim() !== 0) {
+            if (await this.dal.countVictim() !== 0) {
                 throw "already a Victim"
             }
 
