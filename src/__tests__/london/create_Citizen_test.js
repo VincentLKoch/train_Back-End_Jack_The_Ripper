@@ -10,23 +10,23 @@ describe('createCitizen test', () => {
     it('Test createCitizen', async () => {
         
         london.dal.create = jest.fn()
-            .mockReturnValue({id: 1, name: "Toto", posX: 1, posY: 1, isVictim: false })
+            .mockReturnValue({id: 1, name: "Patchwerk", posX: 1, posY: 1, isVictim: false })
 
-        const result = await london.createCitizen("Toto", 1, 1)
+        const result = await london.createCitizen("Patchwerk", 1, 1)
 
         expect(london.dal.create).toHaveBeenCalledTimes(1)
-        expect(result).toEqual({ id: 1, name: "Toto", posX: 1, posY: 1, isVictim: false})
+        expect(result).toEqual({ id: 1, name: "Patchwerk", posX: 1, posY: 1, isVictim: false})
     });
 
 
     it('Test create second', async () => {
         london.dal.create = jest.fn()
-            .mockReturnValue({id: 2, name: "Toto", posX: 3, posY: 4, isVictim: false })
+            .mockReturnValue({id: 2, name: "Dummy", posX: -241, posY: 420, isVictim: false })
 
-        const result = await london.createCitizen("Toto", 3, 4)
+        const result = await london.createCitizen("Dummy", 3, 4)
 
         expect(london.dal.create).toHaveBeenCalledTimes(1)
-        expect(result).toEqual({ id: 2, name: "Toto", posX: 3, posY: 4, isVictim: false})
+        expect(result).toEqual({ id: 2, name: "Dummy", posX: -241, posY: 420, isVictim: false})
     });
 
 })
