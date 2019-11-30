@@ -1,4 +1,4 @@
-import { getLondon } from '../London'
+import { getLondon } from '../../London'
 
 describe('createVictim test', () => {
     let london
