@@ -43,10 +43,12 @@ class London {
     async findJack() {
         try {
             const victim = await this.dal.getData(true)
-            if (!victim) { throw "No Victim" }
+            if (!victim || !(victim.length > 0)) {
+                throw "No Victim"
+            }
 
             const citizens = await this.dal.getData(false)
-            if (!citizens) { throw "No Citizen" }
+            if (!citizens || !(citizens.length > 0)) { throw "No Citizen" }
 
 
             const result = citizens.map(civil => {
@@ -59,9 +61,7 @@ class London {
                 return (civil1.distance < civil2.distance ? civil1 : civil2); // return the civil closest of the two by two reducing
             })
 
-            //console.error
             //We got "Jack" but we still need to check if there is 2 closest citizen
-
             if (result.filter((civil) => {
                 return civil.distance === jack.distance
             }).length !== 1) {
