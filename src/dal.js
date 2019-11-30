@@ -1,4 +1,4 @@
-import { createConnection} from 'typeorm'
+import { createConnection } from 'typeorm'
 import { londonCitizenSchema } from './LondonCitizenSchema'
 import LondonCitizen from './londonCitizen'
 
@@ -37,6 +37,26 @@ class Dal {
         }
     }
 
+    async countVictim() {
+        let connection
+        try {
+            connection = await this.connect()
+            return await connection
+                .getRepository(LondonCitizen)
+                .createQueryBuilder("londonCitizen")
+                .where("londonCitizen.isVIctim = TRUE")
+                .getCount()
+
+        } catch (err) {
+            console.error(err.message)
+            throw err
+        } finally {
+            await connection.close()
+        }
+    }
+
+
+
     async getCitizensData() {
         let connection
         try {
@@ -53,58 +73,22 @@ class Dal {
         }
     }
 
-    async getCitizen(citizenName, xPos, yPos) {
+
+    async seperateVictimAndCitizens() {
         let connection
         try {
             connection = await this.connect()
-            return await connection
-                .getRepository(LondonCitizen)
-                .createQueryBuilder("londonCitizen")
-                .where("londonCitizen.name = :name", { name: citizenName })
-                .andWhere("londonCitizen.posX = :posX", { posX: xPos })
-                .andWhere("londonCitizen.posY = :posY", { posY: yPos })
-                .getOne();
-        } catch (err) {
-            console.error(err.message)
-            throw err
-        } finally {
-            await connection.close()
-        }
-    }
-
-    async makeCitizenVictim(citizenId) {
-        let connection
-        try {
-            connection = await this.connect()
-            await connection
-                .createQueryBuilder()
-                .update(LondonCitizen)
-                .set({ isVictim: true })
-                .where("londonCitizen.id=:id", { id: citizenId })
-                .execute();
-        } catch (error) {
-            console.error(error.message)
-            throw error
-        } finally {
-            await connection.close()
-        }
-    }
-
-    async seperateVictimAndCitizens(){
-        let connection
-        try{
-            connection = await this.connect()
-            const victim =  await connection
+            const victim = await connection
                 .getRepository(LondonCitizen)
                 .createQueryBuilder("londonCitizen")
                 .where("londonCitizen.isVIctim = :isVictim", { isVictim: true })
                 .getOne();
 
             const citizens = await connection
-            .getRepository(LondonCitizen)
-            .find({
-                isVictim : false
-            })
+                .getRepository(LondonCitizen)
+                .find({
+                    isVictim: false
+                })
 
             return [victim, citizens]
 
@@ -113,14 +97,14 @@ class Dal {
             throw error
         } finally {
             await connection.close()
-        }   
+        }
     }
 
     async removeAll() {
         let connection
         try {
             connection = await this.connect()
-            await connection
+            return await connection
                 .getRepository(LondonCitizen)
                 .query('TRUNCATE TABLE LondonCitizen')
         } catch (error) {

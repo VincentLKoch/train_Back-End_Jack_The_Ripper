@@ -41,68 +41,56 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
   const name = req.query.name, posX = req.query.posX, posY = req.query.posY
 
   try {
-    if (!posX || !(posX === '' + parseInt(posX)) && !posY || !(posY === '' + parseInt(posY))) {
-      throw "NoI"
-      }    
-    await getLondon().makeVictim(name,posY,posX)
+    if (!posX || !(posX === '' + parseInt(posX)) || !posY || !(posY === '' + parseInt(posY))) {
+      //if posX/posY is undefined or not int
+      throw "bad request"
+    }
+    await getLondon().createVictim(name, posY, posX)
+
     res
       .statut(204)
       .end();
 
   } catch (error) {
-      switch (error) {
-        case "NoI":
-          //Not a Int
-          res
+    switch (error) {
+      case "bad request":
+        res
           .status(400)
           .json({
-            message: "Pos is not a Int",
+            message: "Bad request, We need both posX and posY to be non-null integer",
             receive: {
               name: name,
               posX: posX,
               posY: posY
             }
           })
-        case "vic1":
-          //citizen is already a victim
-          res
-              .status(409)
-              .json({
-               message: "Invalid victim",
-               receive: {
-                  name: name,
-                  posX: posX,
-                  posY: posY                  
-                }
-              })
-             .end();
-        case "vic2":
-          //Incorrect position given
-          res
-              .status(400)
-              .json({
-               message: "Invalid position",
-               receive: {
-                  name: name,
-                  posX: posX,
-                  posY: posY                  
-                }
-              })
-             .end();
-        default:
+          .end();
+      case "already a Victim":
+        res
+          .status(409)
+          .json({
+            message: "There is already a victim",
+            receive: {
+              name: name,
+              posX: posX,
+              posY: posY
+            }
+          })
+          .end();
+      default:
         //Unkown
         console.error(error)
-          res
-            .status(418)
-            .json({
-              message: "Unkown Error",
-              receive: {
-                name: name,
-                posX: posX,
-                posY: posY 
-              }
-            })
-            .end();
+        res
+          .status(418)
+          .json({
+            message: "Unkown Error",
+            receive: {
+              name: name,
+              posX: posX,
+              posY: posY
+            }
+          })
+          .end();
 
     }//end switch
   }//end catch error

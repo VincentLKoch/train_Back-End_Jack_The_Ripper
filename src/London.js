@@ -5,32 +5,25 @@ class London {
 
     constructor() {
         this.dal = new Dal()
-        this.victimExists = false
     }
 
     async createCitizen(name, posX, posY) {
         try {
             return await this.dal.create(new LondonCitizen(null, name, posX, posY, false))
         } catch (err) {
-            console.error(err.message)
-            throw err
+            throw err //re-throw any error, app.js will check if it's know or not
         }
     }
 
-    async makeVictim(name, xPos, yPos) {
+    async createVictim(name, posX, posY) {
         try {
-            const victim = await this.dal.getCitizen(name, xPos, yPos)
-            if (this.victimExists) { //already a victim
-                throw "vic1"
+            //test if there is already a victim
+            if (this.dal.countVictim() !== 0) {
+                throw "already a Victim"
             }
 
-            if ((victim.posX !== xPos) || (victim.posY !== yPos)) {
-                //Incorrect positions given
-                throw "vic2"
-            }
-            //making the citizen the victim
-            await this.dal.makeCitizenVictim(victim.id)
-            this.victimExists = true
+            //create        
+            return await this.dal.create(new LondonCitizen(null, name, posX, posY, true))
         } catch (error) {
             throw error
         }
@@ -52,7 +45,7 @@ class London {
             const citizens = seperated[1]
             let closestIndex = 0
             let distance = 0
-            let oneClosest = true 
+            let oneClosest = true
 
             if (!victim) { throw "fin1" } // no victim found
             if (!citizens) { throw "fin2" }
@@ -65,25 +58,25 @@ class London {
                 xDiff *= xDiff
                 yDiff *= yDiff
 
-                let dist = Math.sqrt( xDiff + yDiff )
+                let dist = Math.sqrt(xDiff + yDiff)
 
-                if (index == 0){ 
+                if (index == 0) {
                     distance = dist
                     oneClosest = true
                 }
 
-                else{
-                    if(dist < distance){
+                else {
+                    if (dist < distance) {
                         distance = dist
 
                         closestIndex = index
                         oneClosest = true
                     }
-                    else if (dist == distance) {oneClosest = false}
+                    else if (dist == distance) { oneClosest = false }
                 }
             }
 
-        if (!oneClosest) {throw "fin3"} // more than one citizen is the closest 
+            if (!oneClosest) { throw "fin3" } // more than one citizen is the closest 
 
 
             return await citizens[closestIndex]
