@@ -75,7 +75,7 @@ class Dal {
             connection = await this.connect()
             return await connection //only return to test more easily
                 .getRepository(LondonCitizen)
-                .query('TRUNCATE TABLE LondonCitizen')
+                .query('TRUNCATE TABLE LondonCitizen');
         } catch (error) {
             throw error
         } finally {
