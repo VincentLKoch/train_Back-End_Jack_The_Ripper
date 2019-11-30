@@ -20,11 +20,12 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
   const name = req.query.name, posX = req.query.posX, posY = req.query.posY
 
   try {
-    await getLondon().createCitizen(name, posX, posY)
+    const citizen = await getLondon().createCitizen(name, posX, posY)
 
     res
       .status(200)
       .set({ 'Content-Type': 'application/json' })
+      .json(citizen)
       .end();
 
   } catch (error) {
@@ -45,10 +46,12 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
       //if posX/posY is undefined or not int
       throw "bad request"
     }
-    await getLondon().createVictim(name, posY, posX)
+    const victim = await getLondon().createVictim(name, posY, posX)
 
     res
-      .statut(204)
+      .status(200)
+      .set({ 'Content-Type': 'application/json' })
+      .json(victim)
       .end();
 
   } catch (error) {
@@ -94,18 +97,74 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
 
     }//end switch
   }//end catch error
-})//end remove
+})
 
 app.get('/getJack', async (req, res) => {
+  try {
+    const jack = await getLondon().findClosestCitizen()
 
+    res
+      .status(200)
+      .set({ 'Content-Type': 'application/json' })
+      .json(jack)
+      .end();
+
+  } catch (error) {
+    switch (error) {
+      case "fin1":
+        //No victim
+        res
+          .status(404)
+          .json({
+            message: "Victim not found"
+          })
+      case "fin2":
+        //No citizens
+        res
+          .status(404)
+          .json({
+            message: "Citizens not found"
+          })
+          .end();
+      case "vic2":
+        //More than one is closest
+        res
+          .status(409)
+          .json({
+            message: "At least 2 citizens are closest"
+          })
+          .end();
+      default:
+        //Unkown
+        console.error(error)
+        res
+          .status(418)
+          .json({
+            message: "Unkown Error"
+          })
+          .end();
+    }//end switch
+  }//end catch error
 })
 
 app.delete('/evidences', async (req, res) => {
+  try {
+    await getLondon().removeEvidences()
 
+    res
+      .status(204)
+      .end();
+
+  } catch (error) {
+    console.error(error)
+    res
+      .status(418)
+      .json({
+        message: "Unkown Error"
+      })
+      .end();
+  }
 })
-
-
-
 
 
 export default app
