@@ -19,7 +19,8 @@ class London {
 
     async makeVictim(name, xPos, yPos) {
         try {
-            const victim = await this.dal.getCitizen(name, xPos, yPos)
+            const makeVic = new LondonCitizen(null,name, xPos, yPos, false)
+            const victim = await this.dal.create(makeVic)
             if (this.victimExists) { //already a victim
                 throw "vic1"
             }
@@ -31,6 +32,7 @@ class London {
             //making the citizen the victim
             await this.dal.makeCitizenVictim(victim.id)
             this.victimExists = true
+            return victim
         } catch (error) {
             throw error
         }

@@ -44,10 +44,11 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
     if (!posX || !(posX === '' + parseInt(posX)) && !posY || !(posY === '' + parseInt(posY))) {
       throw "NoI"
       }    
-    await getLondon().makeVictim(name,posY,posX)
+    const victim = await getLondon().makeVictim(name,posY,posX)
     res
-      .status(204)
-      .end();
+    .status(200)
+    .set({ 'Content-Type': 'application/json' })
+    .end();
 
   } catch (error) {
       switch (error) {
@@ -64,7 +65,7 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
             }
           })
         case "vic1":
-          //citizen is already a victim
+          //there is already a victim
           res
               .status(409)
               .json({
@@ -113,11 +114,22 @@ app.get('/getJack', async (req, res) => {
 })
 
 app.delete('/evidences', async (req, res) => {
+  try {
+    await getLondon().removeEvidences()
 
+    res
+    .status(204)
+    .end();
+
+  } catch (error)  {
+    console.error(error)
+    res
+    .status(418)
+    .json({
+      message: "Unkown Error"})
+    .end();
+  }
 })
-
-
-
 
 
 export default app
