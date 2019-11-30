@@ -46,7 +46,7 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
             }
           })
           .end();
-
+        break;
       default:
         //Unkown
         console.error(error)
@@ -61,7 +61,7 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
             }
           })
           .end();
-
+        break;
     }//end switch
   }//end catch error
 })
@@ -77,7 +77,6 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
 
     res
       .status(200)
-      .set({ 'Content-Type': 'application/json' })
       .json(victim)
       .end();
 
@@ -95,6 +94,7 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
             }
           })
           .end();
+        break;
       case "already a Victim":
         res
           .status(409)
@@ -107,6 +107,7 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
             }
           })
           .end();
+        break;
       default:
         //Unkown
         console.error(error)
@@ -121,6 +122,7 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
             }
           })
           .end();
+        break;
 
     }//end switch
   }//end catch error
@@ -145,6 +147,7 @@ app.get('/getJack', async (req, res) => {
           .json({
             message: "Victim not found"
           })
+        break;
       case "No Citizen":
         res
           .status(404)
@@ -152,6 +155,7 @@ app.get('/getJack', async (req, res) => {
             message: "Citizens not found"
           })
           .end();
+        break;
       case "Two Jack ?":
         //More than one is closest
         res
@@ -160,6 +164,7 @@ app.get('/getJack', async (req, res) => {
             message: "At least 2 citizens are closest"
           })
           .end();
+        break;
       default:
         //Unkown
         console.error(error)
@@ -169,6 +174,7 @@ app.get('/getJack', async (req, res) => {
             message: "Unkown Error"
           })
           .end();
+        break;
     }//end switch
   }//end catch error
 })
