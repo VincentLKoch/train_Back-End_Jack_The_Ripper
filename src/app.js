@@ -107,10 +107,53 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
 
     }//end switch
   }//end catch error
-})//end remove
+})
 
 app.get('/getJack', async (req, res) => {
+  try {
+    const jack = await getLondon().findClosestCitizen()
 
+    res
+    .status(200)
+    .set({ 'Content-Type': 'application/json' })
+    .end();
+
+  } catch (error) {
+    switch (error) {
+      case "fin1":
+        //No victim
+        res
+        .status(404)
+        .json({
+          message: "Victim not found"
+        })
+      case "fin2":
+        //No citizens
+        res
+            .status(404)
+            .json({
+             message: "Citizens not found"
+            })
+           .end();
+      case "vic2":
+        //More than one is closest
+        res
+            .status(409)
+            .json({
+             message: "At least 2 citizens are closest"
+            })
+           .end();
+      default:
+      //Unkown
+      console.error(error)
+        res
+          .status(418)
+          .json({
+            message: "Unkown Error"
+          })
+          .end();
+  }//end switch
+}//end catch error
 })
 
 app.delete('/evidences', async (req, res) => {
