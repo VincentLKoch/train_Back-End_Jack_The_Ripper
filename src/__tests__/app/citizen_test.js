@@ -7,7 +7,7 @@ const NAME = 'Elias Parker'
 const POSX = 18
 const POSY = -2
 
-const POSX2 = 16.5
+const POSX2 = 16
 const POSY2 = 0
 
 beforeEach(() => {
@@ -16,12 +16,16 @@ beforeEach(() => {
     })
 })
 
+afterEach(() => {
+    jest.resetAllMocks()
+})
+
 describe('Citizen Tests', () => {
     it('When data is fine', (done) => {
         const query = {
             name: NAME,
-            posX: "POSX",
-            posY: "POSY"
+            posX: POSX,
+            posY: POSY
         }
 
         const expectedResponseBody = {
@@ -29,7 +33,7 @@ describe('Citizen Tests', () => {
                 id: 1,
                 name: NAME,
                 posX: "POSX",
-                posY: "POSY",
+                posY: "POSY"
             }
         }
 
@@ -40,17 +44,18 @@ describe('Citizen Tests', () => {
         })
 
         request(app)
-            .post('/citizen/:name/:posX/:posY')
+            .post('/citizen/name/123/456')
             .query(query)
             .expect(200)
             .expect('Content-Type', /json/)
             .expect(response => {
                 expect(response.body).toEqual(expectedResponseBody)
                 expect(createCitizen).toHaveBeenCalledTimes(1)
-                expect(createCitizen).toHaveBeenCalledWith(NAME, POSX, POSY)
+                expect(createCitizen).toHaveBeenCalledWith(NAME, '' + POSX, '' + POSY)
             })
             .end(done)
     })
+
 
     it('When PosX parameter is not a int', (done) => {
         const query = {
@@ -63,8 +68,8 @@ describe('Citizen Tests', () => {
             message: "Bad request, We need both posX and posY to be non-null integer",
             receive: {
                 name: 'Elias Parker',
-                posX: "16.5",
-                posY: "-2"
+                posX: 16,
+                posY: -2
             }
 
         }
@@ -79,7 +84,7 @@ describe('Citizen Tests', () => {
         })
 
         request(app)
-            .post('/citizen/:name/:posX/:posY')
+            .post('/citizen/name/123/456')
             .query(query)
             .expect(400)
             .expect('Content-Type', /json/)
@@ -117,7 +122,7 @@ describe('Citizen Tests', () => {
         })
 
         request(app)
-            .post('/citizen/:name/:posX/:posY')
+            .post('/citizen/name/123/456')
             .query(query)
             .expect(400)
             .expect('Content-Type', /json/)
@@ -127,4 +132,5 @@ describe('Citizen Tests', () => {
             })
             .end(done)
     })
+
 })

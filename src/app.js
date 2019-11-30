@@ -22,10 +22,10 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
 
   try {
 
-   if (!posX || !(posX === '' + parseInt(posX)) || !posY || !(posY === '' + parseInt(posY))) {
-    //if posX/posY is undefined or not int
-    throw "bad request"
-  }
+    if (!posX || !(posX === '' + parseInt(posX)) || !posY || !(posY === '' + parseInt(posY))) {
+      //if posX/posY is undefined or not int
+      throw "bad request"
+    }
     const citizen = await getLondon().createCitizen(name, posX, posY)
 
     res
@@ -49,24 +49,24 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
           })
           .end();
 
-          default:
-            //Unkown
-            console.error(error)
-            res
-              .status(418)
-              .json({
-                message: "Unkown Error",
-                receive: {
-                  name: name,
-                  posX: posX,
-                  posY: posY
-                }
-              })
-              .end();
-    
-        }//end switch
-      }//end catch error
-    })
+      default:
+        //Unkown
+        console.error(error)
+        res
+          .status(418)
+          .json({
+            message: "Unkown Error",
+            receive: {
+              name: name,
+              posX: posX,
+              posY: posY
+            }
+          })
+          .end();
+
+    }//end switch
+  }//end catch error
+})
 
 app.post('/victim/:name/:posX/:posY', async (req, res) => {
   const name = req.query.name, posX = req.query.posX, posY = req.query.posY
