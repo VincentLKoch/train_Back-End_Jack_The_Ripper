@@ -171,7 +171,7 @@ app.get('/getJack', async (req, res) => {
         res
           .status(418)
           .json({
-            message: "Unkown Error"
+            message: "Unknown Error"
           })
           .end();
         break;
