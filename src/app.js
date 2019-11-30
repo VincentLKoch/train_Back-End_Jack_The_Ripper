@@ -113,7 +113,7 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
 
 app.get('/getJack', async (req, res) => {
   try {
-    const jack = await getLondon().findClosestCitizen()
+    const jack = await getLondon().findJack()
 
     res
       .status(200)
@@ -123,6 +123,7 @@ app.get('/getJack', async (req, res) => {
 
   } catch (error) {
     switch (error) {
+      //TODO change throw catch values 
       case "fin1":
         //No victim
         res

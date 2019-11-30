@@ -30,7 +30,6 @@ class Dal {
                 .getRepository(LondonCitizen)
                 .save(newCitizen)
         } catch (err) {
-            console.error(err.message)
             throw err
         } finally {
             await connection.close()
@@ -48,53 +47,23 @@ class Dal {
                 .getCount()
 
         } catch (err) {
-            console.error(err.message)
             throw err
         } finally {
             await connection.close()
         }
     }
 
-
-
-    async getCitizensData() {
+    async getData(Victim) {
         let connection
         try {
             connection = await this.connect()
             return await connection
                 .getRepository(LondonCitizen)
                 .createQueryBuilder("londonCitizen")
+                .where("londonCitizen.isVIctim = :isVictim", { isVictim: Victim })
                 .getMany();
         } catch (err) {
-            console.error(err.message)
             throw err
-        } finally {
-            await connection.close()
-        }
-    }
-
-
-    async seperateVictimAndCitizens() {
-        let connection
-        try {
-            connection = await this.connect()
-            const victim = await connection
-                .getRepository(LondonCitizen)
-                .createQueryBuilder("londonCitizen")
-                .where("londonCitizen.isVIctim = :isVictim", { isVictim: true })
-                .getOne();
-
-            const citizens = await connection
-                .getRepository(LondonCitizen)
-                .find({
-                    isVictim: false
-                })
-
-            return [victim, citizens]
-
-        } catch (error) {
-            console.error(error.message)
-            throw error
         } finally {
             await connection.close()
         }
@@ -108,7 +77,6 @@ class Dal {
                 .getRepository(LondonCitizen)
                 .query('TRUNCATE TABLE LondonCitizen')
         } catch (error) {
-            console.error(error.message)
             throw error
         } finally {
             await connection.close()

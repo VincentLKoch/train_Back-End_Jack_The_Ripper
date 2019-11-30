@@ -38,48 +38,36 @@ class London {
     }
 
 
-    async findClosestCitizen() {
+    async findJack() {
         try {
-            const seperated = await this.dal.seperateVictimAndCitizens()
-            const victim = seperated[0]
-            const citizens = seperated[1]
-            let closestIndex = 0
-            let distance = 0
-            let oneClosest = true
 
-            if (!victim) { throw "fin1" } // no victim found
-            if (!citizens) { throw "fin2" }
+            const victim = await this.dal.getData(true)
+            if (!victim) { throw "No Victim" }
 
-            for (let index = 0; index < citizens.length; index++) {
-                const citizen = await citizens[index];
-                let xDiff = citizen.posX - victim.posX
-                let yDiff = citizen.posY - victim.posY
+            const citizens = await this.dal.getData(false)
+            if (!citizens) { throw "No Citizen" }
 
-                xDiff *= xDiff
-                yDiff *= yDiff
 
-                let dist = Math.sqrt(xDiff + yDiff)
+            const result = citizens.map(civil => {
+                //We use sqare distance, no need to root it in this case
+                const dist = (civil.posX - victim[0]['posX']) * (civil.posX - victim[0]['posX']) + (civil.posY - victim[0]['posY']) * (civil.posY - victim[0]['posY'])
+                return { citizen: civil, distance: dist }
+            })
 
-                if (index == 0) {
-                    distance = dist
-                    oneClosest = true
-                }
+            const jack = result.reduce((civil1, civil2) => {
+                return (civil1.distance < civil2.distance ? civil1 : civil2); // return the civil closest of the two by two reducing
+            })
 
-                else {
-                    if (dist < distance) {
-                        distance = dist
+            //console.error
+            //We got "Jack" but we still need to check if there is 2 closest citizen
 
-                        closestIndex = index
-                        oneClosest = true
-                    }
-                    else if (dist == distance) { oneClosest = false }
-                }
+            if (result.filter((civil) => {
+                return civil.distance === jack.distance
+            }).length !== 1) {
+                throw "Two Jack ?"
             }
 
-            if (!oneClosest) { throw "fin3" } // more than one citizen is the closest 
-
-
-            return await citizens[closestIndex]
+            return jack.citizen
 
         } catch (error) {
             throw error
