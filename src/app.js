@@ -22,11 +22,10 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
 
   try {
 
-    //TODO : 
-    /*
-      Check if name is empty or posX / poY is not a defined int
-      => throw "bad request"
-    */
+   if (!posX || !(posX === '' + parseInt(posX)) || !posY || !(posY === '' + parseInt(posY))) {
+    //if posX/posY is undefined or not int
+    throw "bad request"
+  }
     const citizen = await getLondon().createCitizen(name, posX, posY)
 
     res
@@ -36,19 +35,38 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
       .end();
 
   } catch (error) {
+    switch (error) {
+      case "bad request":
+        res
+          .status(400)
+          .json({
+            message: "Bad request, We need both posX and posY to be non-null integer",
+            receive: {
+              name: name,
+              posX: posX,
+              posY: posY
+            }
+          })
+          .end();
 
-
-    //TODO
-    //418 = unknown error => add console.error in this case
-    //do the switch with the new throw "bad request"
-
-console.error(error) //Unkown
-    res
-      .status(418)
-      .set({ 'Content-Type': 'application/json' })
-      .end();
-  }
-})
+          default:
+            //Unkown
+            console.error(error)
+            res
+              .status(418)
+              .json({
+                message: "Unkown Error",
+                receive: {
+                  name: name,
+                  posX: posX,
+                  posY: posY
+                }
+              })
+              .end();
+    
+        }//end switch
+      }//end catch error
+    })
 
 app.post('/victim/:name/:posX/:posY', async (req, res) => {
   const name = req.query.name, posX = req.query.posX, posY = req.query.posY
