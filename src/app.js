@@ -17,9 +17,16 @@ app.use(function (_req, res, next) {
 
 
 app.post('/citizen/:name/:posX/:posY', async (req, res) => {
+  // get req parameter
   const name = req.query.name, posX = req.query.posX, posY = req.query.posY
 
   try {
+
+    //TODO : 
+    /*
+      Check if name is empty or posX / poY is not a defined int
+      => throw "bad request"
+    */
     const citizen = await getLondon().createCitizen(name, posX, posY)
 
     res
@@ -30,11 +37,16 @@ app.post('/citizen/:name/:posX/:posY', async (req, res) => {
 
   } catch (error) {
 
+
+    //TODO
+    //418 = unknown error => add console.error in this case
+    //do the switch with the new throw "bad request"
+
+console.error(error) //Unkown
     res
       .status(418)
       .set({ 'Content-Type': 'application/json' })
       .end();
-
   }
 })
 
