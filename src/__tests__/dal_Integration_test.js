@@ -14,7 +14,7 @@ import LondonCitizen from '../londonCitizen'
 const AllTests = false
 
 const testConnection = true
-const testCreateCitizen = true
+const testCreateCitizen = false
 const testGetCitizenData = false //need to have testCreateCitizen true
 
 //variables for testing purpose :
