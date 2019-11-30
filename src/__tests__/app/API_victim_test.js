@@ -69,3 +69,32 @@ it.each(
 
         })
 
+
+test("already a Victim", async () => {
+    const fakeResponse = {
+        message: "There is already a victim",
+        receive: {
+            name: 'testName',
+            posX: "10",
+            posY: "-12",
+        },
+    }
+    const createVictim = jest.fn(() => { throw "already a Victim" })
+
+    victimDependency.getLondon = jest.fn().mockReturnValue({
+        createVictim
+    })
+    try {
+        await request(app)
+            .post('/victim/testName/10/-12')
+            .expect(409)
+            .expect('Content-Type', /json/)
+            .expect(response => {
+                expect(response.body).toEqual(fakeResponse)
+            })
+    } catch (err) {
+        expect(err).toBeNull()
+    }
+    expect(createVictim).toHaveBeenCalledWith('testName', "10", "-12")
+    expect(createVictim).toHaveBeenCalledTimes(1)
+})
