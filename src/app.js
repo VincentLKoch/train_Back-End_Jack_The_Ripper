@@ -142,22 +142,20 @@ app.get('/getJack', async (req, res) => {
   } catch (error) {
     switch (error) {
       //TODO change throw catch values 
-      case "fin1":
-        //No victim
+      case "No Victim":
         res
           .status(404)
           .json({
             message: "Victim not found"
           })
-      case "fin2":
-        //No citizens
+      case "No Citizen":
         res
           .status(404)
           .json({
             message: "Citizens not found"
           })
           .end();
-      case "vic2":
+      case "Two Jack ?":
         //More than one is closest
         res
           .status(409)
