@@ -31,12 +31,12 @@ class London {
 
     async removeEvidences() {
         try {
+            //no need to return the number anything
             await this.dal.removeAll()
         } catch (error) {
             throw error
         }
     }
-
 
     //See getClosest.sql for the query / comment of an SQL way to get Jack (way faster)
     //But since this TP is a javascript TP we will do it in javascript

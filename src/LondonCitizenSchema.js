@@ -1,12 +1,12 @@
 import LondonCitizen from './londonCitizen'
-import {EntitySchema} from 'typeorm'
+import { EntitySchema } from 'typeorm'
 
 export const londonCitizenSchema = new EntitySchema({
     tableName: 'LondonCitizen',
     name: 'londonCitizen',
     target: LondonCitizen,
     columns: {
-        id:{
+        id: {
             primary: true,
             generated: true,
             type: 'int'
@@ -22,12 +22,12 @@ export const londonCitizenSchema = new EntitySchema({
             nullable: false
         },
 
-        posY:{
+        posY: {
             type: 'int',
             nullable: false
         },
 
-        isVictim:{
+        isVictim: {
             type: 'boolean',
             nullable: false
         },

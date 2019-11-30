@@ -17,18 +17,15 @@ const testConnection = true
 const testCountVictim = true
 const testCreateCitizen = false
 const testCreateVictim = false
-const testGetCitizenData = false //need to have testCreateCitizen true
+const testGetData = true
 const testRemoveAll = false
 
 
 //variables for testing purpose :
 const dal = new Dal()
 
-
-let testingCitizen = new LondonCitizen(null, "John Smith", 34, 15, false)
-let testingVictim = new LondonCitizen(null, "Jean-Kevin G@m3rz", 12, 23, true)
-
-
+const testingCitizen = new LondonCitizen(null, "John Smith", 34, 15, false)
+const testingVictim = new LondonCitizen(null, "Jean-Kevin G@m3rz", 12, 23, true)
 
 if (AllTests || testConnection) {
     test('Testing Connection', async () => {
@@ -46,7 +43,7 @@ if (AllTests || testConnection) {
 if (AllTests || testCountVictim) {
     test('Testing create citizen', async () => {
         try {
-            const count =  await dal.countVictim()
+            const count = await dal.countVictim()
 
             //expect(count).toEqual(1) //check number of victim in db before and change the number
             expect(typeof count).toBe('number')
@@ -79,24 +76,25 @@ if (AllTests || testCreateVictim) {
     });
 }
 
-if (AllTests || testRemoveAll) {
-    test('Testing removeAll()', async () => {
-        let result
+
+//only test if there is an error
+if (AllTests || testGetData) {
+    test('Testing example', async () => {
         try {
-            result = await dal.removeAll()
-            expect(result['warningStatus']).toBe(0)
+            await dal.getData(true)
+            await dal.getData(false)
         } catch (error) {
             expect(error).toBeNull()
         }
     });
 }
 
-if (AllTests || testGetCitizenData) {
-    test('Testing example', async () => {
+if (AllTests || testRemoveAll) {
+    test('Testing removeAll()', async () => {
         let result
         try {
-            result = await dal.create(testingCitizen)
-            expect().toReturnWith(testingCitizen)
+            result = await dal.removeAll()
+            expect(result['warningStatus']).toBe(0)
         } catch (error) {
             expect(error).toBeNull()
         }
