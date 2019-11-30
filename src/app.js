@@ -140,7 +140,6 @@ app.get('/getJack', async (req, res) => {
 
   } catch (error) {
     switch (error) {
-      //TODO change throw catch values 
       case "No Victim":
         res
           .status(404)

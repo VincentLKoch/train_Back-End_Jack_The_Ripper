@@ -26,8 +26,8 @@ describe('Data Access Layer', () => {
             where: jest.fn().mockReturnThis(typeormMocked),
             andWhere: jest.fn().mockReturnThis(typeormMocked),
 
-            query: jest.fn().mockReturnThis(typeormMocked),
             set: jest.fn().mockReturnThis(typeormMocked),
+            query: jest.fn().mockReturnThis(typeormMocked),
 
 
             execute: jest.fn().mockReturnThis(typeormMocked),
@@ -61,12 +61,62 @@ describe('Data Access Layer', () => {
         } catch (error) {
             expect(error).toBeNull()
         }
-        
+
+        expect(typeormMocked.getRepository).toHaveBeenCalledTimes(1)
+        expect(typeormMocked.close).toHaveBeenCalledTimes(1)
+        expect(typeormMocked.save).toHaveBeenCalledTimes(1)
         expect(typeormMocked.save).toHaveBeenCalledWith({ dummy: "test" })
+    });
+
+    it('countVictim()', async () => {
+        typeormMocked.getCount = jest.fn().mockReturnValue(42)
+
+        try {
+            const result = await dal.countVictim()
+
+            expect(result).toBe(42)
+        } catch (error) {
+            expect(error).toBeNull()
+        }
+
+        expect(typeormMocked.getRepository).toHaveBeenCalledTimes(1)
+        expect(typeormMocked.createQueryBuilder).toHaveBeenCalledTimes(1)
+        expect(typeormMocked.where).toHaveBeenCalledTimes(1)
+        expect(typeormMocked.getCount).toHaveBeenCalledTimes(1)
+        expect(typeormMocked.close).toHaveBeenCalledTimes(1)
+
+    });
+
+    it('getData(Victim)', async () => {
+        typeormMocked.getMany = jest.fn().mockReturnValue(42)
+
+        try {
+
+            const result = await dal.getData(true)
+            expect(result).toBe(42)
+        } catch (error) {
+            expect(error).toBeNull()
+        }
+
+        expect(typeormMocked.getRepository).toHaveBeenCalledTimes(1)
+        expect(typeormMocked.createQueryBuilder).toHaveBeenCalledTimes(1)
+        expect(typeormMocked.where).toHaveBeenCalledTimes(1)
+        expect(typeormMocked.getMany).toHaveBeenCalledTimes(1)
+        expect(typeormMocked.close).toHaveBeenCalledTimes(1)
+
+    });
+
+    it('removeAll()', async () => {
+        try {
+            await dal.getData(true)
+        } catch (error) {
+            expect(error).toBeNull()
+        }
+
+        expect(typeormMocked.getRepository).toHaveBeenCalledTimes(1)
         expect(typeormMocked.close).toHaveBeenCalledTimes(1)
     });
 
 
-    //TODO
 
 })
