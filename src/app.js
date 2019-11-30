@@ -46,7 +46,7 @@ app.post('/victim/:name/:posX/:posY', async (req, res) => {
       }    
     await getLondon().makeVictim(name,posY,posX)
     res
-      .statut(204)
+      .status(204)
       .end();
 
   } catch (error) {
